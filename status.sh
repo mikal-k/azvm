@@ -26,7 +26,9 @@ az keyvault list --query "[].{Name:name, RG:resourceGroup, Location:location}" -
 echo ""
 
 echo "💸 Monthly Cost Estimate (Preview):"
-az consumption usage list --top 5 --query "[].{Resource:instanceName, Cost:pretaxCost, Unit:unitOfMeasure}" -o table || echo "(Cost info not available)"
+if ! az consumption usage list --top 5 -o table 2>/dev/null; then
+  echo "(Cost info not available – possibly due to 'usageStart' bug in Azure CLI)"
+fi
 echo ""
 
 ############################################
